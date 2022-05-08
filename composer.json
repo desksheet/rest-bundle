@@ -1,0 +1,44 @@
+{
+    "name": "desksheet/rest-bundle",
+    "description": "A lightweight bundle to rapidly develop RESTful APIs with Symfony",
+    "license": "MIT",
+    "type": "symfony-bundle",
+    "authors": [
+        {
+            "name": "Radhi Guennichi",
+            "email": "hello@guennichi.com",
+            "homepage": "https://www.guennichi.com"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "symfony/dependency-injection": "^6.0",
+        "symfony/framework-bundle": "^6.0"
+    },
+    "require-dev": {
+        "doctrine/coding-standard": "^9.0",
+        "ergebnis/composer-normalize": "^2.26",
+        "sensio/framework-extra-bundle": "^6.2",
+        "squizlabs/php_codesniffer": "^3.6",
+        "symfony/phpunit-bridge": "^6.0",
+        "symfony/serializer": "^6.0",
+        "symfony/validator": "^6.0",
+        "vimeo/psalm": "^4.23"
+    },
+    "autoload": {
+        "psr-4": {
+            "Desksheet\\RestBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Desksheet\\RestBundle\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "ergebnis/composer-normalize": true
+        }
+    }
+}
