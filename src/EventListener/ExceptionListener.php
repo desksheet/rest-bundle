@@ -9,13 +9,14 @@ use Desksheet\RestBundle\Serializer\Normalizer\ProblemNormalizer;
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final class ExceptionListener
 {
     use EventListenerTrait;
 
-    public function __construct(private readonly SerializerInterface $serializer)
+    public function __construct(private readonly bool $debug, private readonly SerializerInterface $serializer)
     {
     }
 
@@ -26,7 +27,13 @@ final class ExceptionListener
         }
 
         $exception = $event->getThrowable();
-        $context   = [];
+        if (!$exception instanceof HttpExceptionInterface && $this->debug) {
+            // The exception is not http, and the debug mode is enabled
+            // no need to return json response in this case, ignore this listener.
+            return;
+        }
+
+        $context = [];
         if ($exception instanceof ValidationException) {
             $context = [
                 ProblemNormalizer::TITLE => $exception->getTitle(),
