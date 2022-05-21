@@ -5,7 +5,9 @@ declare(strict_types=1);
 use Desksheet\RestBundle\EventListener\ExceptionListener;
 use Desksheet\RestBundle\EventListener\ViewListener;
 use Desksheet\RestBundle\Request\ParamConverter\RequestParamConverter;
-use Desksheet\RestBundle\Serializer\Normalizer\CheckboxNormalizer;
+use Desksheet\RestBundle\Serializer\Normalizer\BooleanValueNormalizer;
+use Desksheet\RestBundle\Serializer\Normalizer\FloatValueNormalizer;
+use Desksheet\RestBundle\Serializer\Normalizer\IntegerValueNormalizer;
 use Desksheet\RestBundle\Serializer\Normalizer\ProblemNormalizer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -18,7 +20,11 @@ return static function (ContainerConfigurator $container): void {
         ->set('desksheet.rest.normalizer.problem', ProblemNormalizer::class)
             ->args([param('kernel.debug'), service('serializer.name_converter.metadata_aware')->nullOnInvalid(), []])
             ->tag('serializer.normalizer', ['priority' => -890])
-        ->set('desksheet.rest.normalizer.checkbox', CheckboxNormalizer::class)
+        ->set('desksheet.rest.normalizer.boolean_value', BooleanValueNormalizer::class)
+            ->tag('serializer.normalizer', ['priority' => -915])
+        ->set('desksheet.rest.normalizer.integer_value', IntegerValueNormalizer::class)
+            ->tag('serializer.normalizer', ['priority' => -915])
+        ->set('desksheet.rest.normalizer.float_value', FloatValueNormalizer::class)
             ->tag('serializer.normalizer', ['priority' => -915])
         // Param converters
         ->set('desksheet.rest.request.param_converter', RequestParamConverter::class)

@@ -71,6 +71,6 @@ class ProblemNormalizer implements NormalizerInterface, CacheableSupportsMethodI
 
     public function hasCacheableSupportsMethod(): bool
     {
-        return true;
+        return self::class === static::class;
     }
 }
