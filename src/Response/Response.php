@@ -9,8 +9,10 @@ use Symfony\Component\Serializer\Annotation\Ignore;
 
 class Response implements ResponseInterface
 {
-    protected int $statusCode          = HttpFoundationResponse::HTTP_OK;
-    protected array $headers           = [];
+    protected int $statusCode = HttpFoundationResponse::HTTP_OK;
+    /** @var array<string, string> */
+    protected array $headers = [];
+    /** @var array<string, mixed> */
     protected array $serializerContext = [];
 
     #[Ignore] public function getStatusCode(): int
