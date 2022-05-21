@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace Desksheet\RestBundle\Response;
 
-use Symfony\Component\Serializer\Annotation\Ignore;
+use JMS\Serializer\Annotation\Exclude;
+use JMS\Serializer\SerializationContext;
 
 interface ResponseInterface
 {
-    #[Ignore]
-    public function getStatusCode(): int;
+    #[Exclude] public function getStatusCode(): int;
 
-    #[Ignore]
-    public function getHeaders(): array;
+    #[Exclude] public function getHeaders(): array;
 
-    #[Ignore]
-    public function getSerializerContext(): array;
+    #[Exclude] public function getSerializerContext(): SerializationContext;
 }

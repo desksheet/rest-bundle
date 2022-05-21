@@ -9,12 +9,12 @@ use Desksheet\RestBundle\Request\RequestBodyInterface;
 use Desksheet\RestBundle\Request\RequestFormInterface;
 use Desksheet\RestBundle\Request\RequestInterface;
 use Desksheet\RestBundle\Request\RequestQueryInterface;
+use JMS\Serializer\Exception\Exception as JMSSerializerException;
+use JMS\Serializer\SerializerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class RequestParamConverter implements ParamConverterInterface
@@ -30,13 +30,9 @@ final class RequestParamConverter implements ParamConverterInterface
         $data = null;
         if (is_subclass_of($configuration->getClass(), RequestBodyInterface::class)) {
             $data = $request->getContent();
-        }
-
-        if (is_subclass_of($configuration->getClass(), RequestQueryInterface::class)) {
+        } elseif (is_subclass_of($configuration->getClass(), RequestQueryInterface::class)) {
             $data = $request->query->all();
-        }
-
-        if (is_subclass_of($configuration->getClass(), RequestFormInterface::class)) {
+        } elseif (is_subclass_of($configuration->getClass(), RequestFormInterface::class)) {
             $data = $request->request->all() + $request->files->all();
         }
 
@@ -51,7 +47,7 @@ final class RequestParamConverter implements ParamConverterInterface
                 'json',
             );
             assert($object instanceof RequestInterface);
-        } catch (ExceptionInterface $e) {
+        } catch (JMSSerializerException $e) {
             throw new BadRequestHttpException($e->getMessage(), $e);
         }
 

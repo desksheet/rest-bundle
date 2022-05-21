@@ -5,18 +5,21 @@ declare(strict_types=1);
 namespace Desksheet\RestBundle\EventListener;
 
 use Desksheet\RestBundle\Exception\ValidationException;
-use Desksheet\RestBundle\Serializer\Normalizer\ProblemNormalizer;
+use Desksheet\RestBundle\Serializer\JMS\Handler\ProblemHandler;
+use JMS\Serializer\ContextFactory\SerializationContextFactoryInterface;
+use JMS\Serializer\SerializerInterface;
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Symfony\Component\Serializer\SerializerInterface;
 
 final class ExceptionListener
 {
     use EventListenerTrait;
 
-    public function __construct(private readonly SerializerInterface $serializer)
-    {
+    public function __construct(
+        private readonly SerializerInterface $serializer,
+        private readonly SerializationContextFactoryInterface $serializationContextFactory,
+    ) {
     }
 
     public function __invoke(ExceptionEvent $event): void
@@ -26,12 +29,10 @@ final class ExceptionListener
         }
 
         $exception = $event->getThrowable();
-        $context   = [];
+        $context   = $this->serializationContextFactory->createSerializationContext();
         if ($exception instanceof ValidationException) {
-            $context = [
-                ProblemNormalizer::TITLE => $exception->getTitle(),
-                ProblemNormalizer::VIOLATIONS => $exception->getConstraintViolationList(),
-            ];
+            $context->setAttribute(ProblemHandler::TITLE, $exception->getTitle());
+            $context->setAttribute(ProblemHandler::VIOLATIONS, $exception->getConstraintViolationList());
         }
 
         $flattenException = FlattenException::createFromThrowable($exception);

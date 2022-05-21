@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Desksheet\RestBundle\EventListener;
 
 use Desksheet\RestBundle\Response\ResponseInterface;
+use JMS\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
-use Symfony\Component\Serializer\SerializerInterface;
 
 final class ViewListener
 {
