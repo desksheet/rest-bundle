@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Desksheet\RestBundle\EventListener;
 
-use Desksheet\RestBundle\Controller\RestControllerInterface;
+use Desksheet\RestBundle\Controller\ControllerInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 trait EventListenerTrait
@@ -12,6 +12,6 @@ trait EventListenerTrait
     private function supports(RequestEvent $event): bool
     {
         /** @psalm-suppress MixedArgument */
-        return $event->isMainRequest() && is_subclass_of($event->getRequest()->attributes->get('_controller'), RestControllerInterface::class);
+        return $event->isMainRequest() && is_subclass_of($event->getRequest()->attributes->get('_controller'), ControllerInterface::class);
     }
 }
