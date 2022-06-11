@@ -10,6 +10,8 @@ use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\InsufficientAuthenticationException;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final class ExceptionListener
@@ -39,6 +41,16 @@ final class ExceptionListener
                 ProblemNormalizer::TITLE => $exception->getTitle(),
                 ProblemNormalizer::VIOLATIONS => $exception->getConstraintViolationList(),
             ];
+        } else {
+            $previousException = $exception->getPrevious();
+            if ($previousException instanceof AuthenticationException) {
+                $context = [
+                    ProblemNormalizer::TITLE => match ($previousException::class) {
+                        InsufficientAuthenticationException::class => 'Authentication Required',
+                        default => 'Authentication Failed',
+                    },
+                ];
+            }
         }
 
         $flattenException = FlattenException::createFromThrowable($exception);
