@@ -23,8 +23,7 @@
         "symfony/phpunit-bridge": "^6.0",
         "symfony/serializer": "^6.1",
         "symfony/validator": "^6.1",
-        "vimeo/psalm": "^4.23",
-        "symfony/security-http": "^6.1"
+        "vimeo/psalm": "^4.23"
     },
     "autoload": {
         "psr-4": {

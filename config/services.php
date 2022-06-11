@@ -33,7 +33,7 @@ return static function (ContainerConfigurator $container): void {
         // Event listeners
         ->set('desksheet.rest.exception_listener', ExceptionListener::class)
             ->args([param('kernel.debug'), service('serializer')->ignoreOnInvalid()])
-            ->tag('kernel.event_listener', ['event' => 'kernel.exception'])
+            ->tag('kernel.event_listener', ['event' => 'kernel.exception', 'priority' => -10])
         ->set('desksheet.rest.view_listener', ViewListener::class)
             ->args([service('serializer')->ignoreOnInvalid()])
             ->tag('kernel.event_listener', ['event' => 'kernel.view'])

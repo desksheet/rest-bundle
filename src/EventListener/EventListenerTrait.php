@@ -12,6 +12,6 @@ trait EventListenerTrait
     private function supports(RequestEvent $event): bool
     {
         /** @psalm-suppress MixedArgument */
-        return $event->isMainRequest() && is_subclass_of($event->getRequest()->attributes->get('_controller'), ControllerInterface::class);
+        return $event->isMainRequest() && !$event->hasResponse() && is_subclass_of($event->getRequest()->attributes->get('_controller'), ControllerInterface::class);
     }
 }
